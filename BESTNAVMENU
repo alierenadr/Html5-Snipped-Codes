@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamburger Menü</title>
+    <style>
+        /* Genel Stiller */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            background-color: transparent; /* Arkaplanı şeffaf yapıyoruz */
+            color: #000; /* Yazı ve ikon renkleri siyah */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001; /* Menü içeriğinin üzerinde yer almak için */
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #000; /* İkon renkleri siyah */
+            margin: 3px 0;
+            transition: all 0.3s; /* Animasyon ekliyoruz */
+        }
+
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95); /* Şeffaf beyaz arkaplan */
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s; /* Animasyon ekliyoruz */
+        }
+
+        .menu-content {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: transparent; /* Arkaplanı şeffaf yapıyoruz */
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s; /* Animasyon ekliyoruz */
+            width: 100%; /* Mobil ve tablet için tam ekran */
+            max-width: 400px; /* İçeriğin maksimum genişliği */
+            text-align: center; /* İçeriği ortalıyoruz */
+        }
+
+        .menu-content ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-content ul li {
+            margin-bottom: 10px;
+            max-width: 100%;
+        }
+
+        .menu-content ul li a {
+            text-decoration: none;
+            color: #000; /* Yazı rengi siyah */
+            display: block;
+            padding: 10px;
+        }
+
+        .menu-content ul li a:hover {
+            text-decoration: underline; /* Hover efekti */
+        }
+
+        .menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .menu li {
+            margin-left: 20px;
+        }
+
+        .menu li:first-child {
+            margin-left: 0;
+        }
+
+        .menu a {
+            color: #000; /* Yazı rengi siyah */
+            text-decoration: none;
+        }
+
+        .menu a:hover {
+            text-decoration: underline; /* Hover efekti */
+        }
+
+        /* Mobil Boyutlar için Stiller */
+        @media (max-width: 1080px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                background-color: transparent; /* Arkaplanı şeffaf yapıyoruz */
+                padding: 10px 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .menu-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .menu-toggle.active ~ .menu-overlay {
+                display: block;
+                opacity: 1;
+            }
+
+            .menu-toggle.active ~ .menu-content {
+                display: block;
+                opacity: 1;
+            }
+        }
+
+        /* Tablet Boyutları için Stiller */
+        @media (min-width: 769px) and (max-width: 1080px) {
+            .menu {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="menu">
+                <li><a href="#">Anasayfa</a></li>
+                <li><a href="#">Hakkımızda</a></li>
+                <li><a href="#">Hizmetler</a></li>
+                <li><a href="#">İletişim</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="menu-overlay" onclick="toggleMenu()"></div>
+    <div class="menu-content">
+        <ul>
+            <li><a href="#">Anasayfa</a></li>
+            <li><a href="#">Hakkımızda</a></li>
+            <li><a href="#">Hizmetler</a></li>
+            <li><a href="#">İletişim</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // JavaScript Kodu
+        function toggleMenu() {
+            var menuToggle = document.querySelector('.menu-toggle');
+            var menuOverlay = document.querySelector('.menu-overlay');
+            var menuContent = document.querySelector('.menu-content');
+
+            menuToggle.classList.toggle('active');
+            if (menuToggle.classList.contains('active')) {
+                menuOverlay.style.display = 'block';
+                setTimeout(() => {
+                    menuOverlay.style.opacity = '1';
+                    menuContent.style.display = 'block';
+                    menuContent.style.opacity = '1';
+                }, 10);
+            } else {
+                menuOverlay.style.opacity = '0';
+                menuContent.style.opacity = '0';
+                setTimeout(() => {
+                    menuOverlay.style.display = 'none';
+                    menuContent.style.display = 'none';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
